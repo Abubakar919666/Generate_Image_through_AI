@@ -4,7 +4,9 @@ const generateForm = document.querySelector(".generate-form")
 // Selecting the image Gallery
 const imageGallery = document.querySelector(".img-gallery")
 // Use openAI API to generate images based on user prompts
-const OPENAI_API_KEY = "sk-4Ek0WKhHKQrPoOq-T18nOLWxAZLGb1Und3YbK8cyBET3BlbkFJFNWslSBfWQK2Y6vxtNBGZTkkn7vVq6Jqb2iWfzPtcA";
+require('dotenv').config();
+const apiKey = process.env.OPENAI_API_KEY;
+
 
 const generatAiImage = async (userPrompt, userImageQuantity) => {
     try {
@@ -13,20 +15,25 @@ const generatAiImage = async (userPrompt, userImageQuantity) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${OPENAI_API_KEY}`
+                "Authorization": `Bearer ${apiKey}`
             },
             body: JSON.stringify({
                 prompt : userPrompt ,
-                n : userImageQuantity,
+                n : parseInt(userImageQuantity),
                 size : "512x512",
                 quality : "dall-e-3",
                 response_format : "b64_json"
 
             })
         });
-    } catch (error) {
-        console.log(error);
+        if (!response.ok) throw new Error("Failed to generate image ! Please try again.");
         
+        // Get data from response
+        const {data} = await response.json();
+        
+        
+    } catch (error) {
+        alert(error.message);
     }
 }
 
