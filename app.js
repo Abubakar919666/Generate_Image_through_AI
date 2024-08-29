@@ -3,40 +3,53 @@ const generateForm = document.querySelector(".generate-form")
 
 // Selecting the image Gallery
 const imageGallery = document.querySelector(".img-gallery")
+
 // Use openAI API to generate images based on user prompts
-require('dotenv').config();
-const apiKey = process.env.OPENAI_API_KEY;
+const token= "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";
 
 
-const generatAiImage = async (userPrompt, userImageQuantity) => {
+const updateImageCard = (imgDataArray) => {
+    imgDataArray.forEach((imgObject,  index) => {
+        const imgCard = imageGallery.querySelectorAll(".img-card")[index];
+        const imgElement = imgCard.querySelector("img");
+
+        // set the image source to Ai-generated image data
+        const aiGeneratedImg = `data:image/jpeg;base64,${imgObject.b64_json}`;
+        imgElement.src = aiGeneratedImg;
+
+        // when the image is loaded, remove the image class
+        imgElement.onload = () => {
+            imgCard.classList.remove("loading");
+        }
+    });
+}
+
+const generateAiImages = async (userPrompt, userImageQuantity) => {
     try {
         // Send a request to OpenAI API to generate image based on user inputs 
-        const response = await fetch ("https://api.openai.com/v1/images/generations" , {
+        const response = await fetch ("https://api-inference.huggingface.co/models/ZB-Tech/Text-to-Image" , {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${apiKey}`
+                "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({
+            body: JSON.stringify ({
                 prompt : userPrompt ,
-                n : parseInt(userImageQuantity),
-                size : "512x512",
-                quality : "dall-e-3",
-                response_format : "b64_json"
-
+                n : userImageQuantity
             })
         });
         if (!response.ok) throw new Error("Failed to generate image ! Please try again.");
         
         // Get data from response
         const {data} = await response.json();
+        console.log(data);
         
-        
+        // updateImageCard([...data]);
     } catch (error) {
         alert(error.message);
     }
 }
-
+ 
 
 
 // Defining the Event Handler
@@ -65,7 +78,7 @@ const handleFormSubmission = (e) =>{
     imageGallery.innerHTML = imgCardMarkup;
 
 // generate AI image from user prompt
-    generatAiImage(userPrompt, userImageQuantity);
+    generateAiImages(userPrompt, userImageQuantity);
     
 }
 // Adding the Event Listener
