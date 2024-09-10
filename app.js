@@ -5,7 +5,7 @@ const generateForm = document.querySelector(".generate-form")
 const imageGallery = document.querySelector(".img-gallery")
 
 // Use openAI API to generate images based on user prompts
-const token= "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";
+
 
 
 const updateImageCard = (imgDataArray) => {
