@@ -49,7 +49,7 @@ const handleFormSubmission = (e) =>{
 // Get user input and image quantity values from the form
     const userPrompt = e.srcElement[0].value;
     const userImageQuantity = e.srcElement[1].value;
-    // console.log(userPrompt , userImageQuantity);
+    console.log(userPrompt , userImageQuantity);
    
 // Create HTML  markup for image card with loading state  
     const imgCardMarkup = Array.from({length:userImageQuantity}, () =>
