@@ -27,17 +27,6 @@ const updateImageCard = (imgDataArray) => {
 const generateAiImages = async (userPrompt, userImageQuantity) => {
     try {
         // Send a request to OpenAI API to generate image based on user inputs 
-        const response = await fetch ("https://api-inference.huggingface.co/models/ZB-Tech/Text-to-Image" , {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify ({
-                prompt : userPrompt ,
-                n : userImageQuantity
-            })
-        });
         if (!response.ok) throw new Error("Failed to generate image ! Please try again.");
         
         // Get data from response
